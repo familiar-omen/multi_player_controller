@@ -8,7 +8,7 @@ var sprint : bool
 
 func _init() -> void:
 	# Process before state_machines
-	process_priority = -11
+	process_physics_priority = -11
 
 func _physics_process(_delta: float) -> void:
 	if is_multiplayer_authority():

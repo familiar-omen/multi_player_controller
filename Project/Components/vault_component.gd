@@ -4,9 +4,6 @@ var vault_range := 1.0
 var vault_height := 1.0
 var vault_clearance := 2.0
 
-@export
-var disable_on_grabble : Array[Node]
-
 var is_grounded : bool
 var _velocity_component : Velocity3D
 
