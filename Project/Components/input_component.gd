@@ -1,5 +1,6 @@
 class_name InputComponent extends Component
 
+@export var cam : Camera3D
 var movement : Vector2
 
 func _physics_process(_delta: float) -> void:
@@ -10,3 +11,5 @@ func _physics_process(_delta: float) -> void:
 func set_auth(player_id : int):
 	set_multiplayer_authority(player_id)
 	entity.set_multiplayer_authority(player_id)
+	if is_multiplayer_authority():
+		cam.make_current()

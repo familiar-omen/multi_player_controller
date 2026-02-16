@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-FindByType="*uid://jsyqhtl1v18b"
+FindByType="uid://jsyqhtl1v18b"
 
 [file_customization]
 

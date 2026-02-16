@@ -31,8 +31,9 @@ height = 1.8
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1689822007]
 replication_config = SubResource("SceneReplicationConfig_2hs0m")
 
-[node name="InputComponent" type="Node" parent="." unique_id=674188018]
+[node name="InputComponent" type="Node" parent="." unique_id=674188018 node_paths=PackedStringArray("cam")]
 script = ExtResource("1_2hs0m")
+cam = NodePath("../Head/Camera3D")
 metadata/_custom_type_script = "uid://b35rn4471h1pw"
 
 [node name="Movement" type="Node" parent="." unique_id=2025839233]
