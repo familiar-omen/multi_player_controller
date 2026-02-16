@@ -1,11 +1,11 @@
 class_name GrapplingGun extends State
 
 @export
-var force : float = 5
+var force : float = 15
 @export
-var max_speed : float = 10
+var max_speed : float = 35
 @export
-var grabble_origin_offset : Vector3
+var grabble_origin_offset : Vector3 = Vector3(0,1,0)
 
 const RAY_LENGTH = 20
 

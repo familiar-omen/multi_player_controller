@@ -1,15 +1,16 @@
 [gd_scene format=3 uid="uid://b75ft2n5mr6wf"]
 
 [ext_resource type="Script" uid="uid://dbms2jkct43ij" path="res://Project/Components/movement_component.gd" id="1_1jxqw"]
+[ext_resource type="Script" uid="uid://b35rn4471h1pw" path="res://Project/Components/input_component.gd" id="1_2hs0m"]
 [ext_resource type="Script" uid="uid://bj0x6p4sp53fo" path="res://Project/Components/look_component.gd" id="2_dw050"]
-[ext_resource type="Resource" uid="uid://cakkqgjrkl67p" path="res://Project/Controls/movement.tres" id="2_n7ghd"]
 [ext_resource type="Script" uid="uid://ddn25iimi0fma" path="res://Project/Components/gravity_component.gd" id="3_b26j0"]
-[ext_resource type="Resource" uid="uid://cwrwrauliwshv" path="res://Project/Controls/sprint.tres" id="3_nvl01"]
-[ext_resource type="Resource" uid="uid://dncnh4ihjbtxd" path="res://Project/Controls/jump.tres" id="4_ivps1"]
 [ext_resource type="AudioStream" uid="uid://ddvruvv2183s" path="res://assets/freesound_community-concrete-footsteps-6752.mp3" id="4_n7ghd"]
 [ext_resource type="Script" uid="uid://ddh21bk2h46u8" path="res://Project/Components/head_bob_component.gd" id="5_nvl01"]
-[ext_resource type="Script" uid="uid://bs58xpgt7s483" path="res://Project/Components/grapling_hook.gd" id="6_ivps1"]
-[ext_resource type="Script" uid="uid://cj4l1ldjqy20f" path="res://Project/Components/vault_component.gd" id="7_urp6f"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2hs0m"]
+properties/0/path = NodePath("InputComponent:movement")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_gv5m4"]
 height = 1.8
@@ -21,11 +22,15 @@ height = 1.8
 
 [node name="Player" type="CharacterBody3D" unique_id=35576554]
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1689822007]
+replication_config = SubResource("SceneReplicationConfig_2hs0m")
+
+[node name="InputComponent" type="Node" parent="." unique_id=674188018]
+script = ExtResource("1_2hs0m")
+metadata/_custom_type_script = "uid://b35rn4471h1pw"
+
 [node name="Movement" type="Node" parent="." unique_id=2025839233]
 script = ExtResource("1_1jxqw")
-move_input = ExtResource("2_n7ghd")
-sprint_button = ExtResource("3_nvl01")
-jump_button = ExtResource("4_ivps1")
 
 [node name="LookComponent" type="Node" parent="." unique_id=962373716 node_paths=PackedStringArray("vertical_look")]
 script = ExtResource("2_dw050")
@@ -61,13 +66,3 @@ current = true
 [node name="HeadBob" type="Node" parent="Head/Camera3D" unique_id=1545710497]
 script = ExtResource("5_nvl01")
 frequency = 2.355
-
-[node name="GrapplingGun" type="Node" parent="Head/Camera3D" unique_id=1882057274]
-script = ExtResource("6_ivps1")
-force = 15.0
-max_speed = 35.0
-grabble_origin_offset = Vector3(0, 1, 0)
-
-[node name="VaultComponent" type="Node" parent="Head/Camera3D" unique_id=227832262 node_paths=PackedStringArray("disable_on_grabble")]
-script = ExtResource("7_urp6f")
-disable_on_grabble = [NodePath("../../../Movement"), NodePath("../HeadBob"), NodePath("../../../GravityComponent")]

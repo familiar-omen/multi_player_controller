@@ -75,7 +75,8 @@ func _on_lobby_created(result : int, new_lobby_id : int):
 func _add_player(id : int = 1):
 	print("Player joined: ", id)
 	var player = player_scene.instantiate()
-	player.set_multiplayer_authority(id, true)
+	Components.get_first(InputComponent).on(player).set_multiplayer_authority(id, true)
+	#player
 	player.name = "Player_" + str(id)
 	player_objects.set(id, player)
 	entity.add_child.call_deferred(player)
