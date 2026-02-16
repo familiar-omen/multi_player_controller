@@ -9,3 +9,4 @@ func _physics_process(_delta: float) -> void:
 @rpc("call_local")
 func set_auth(player_id : int):
 	set_multiplayer_authority(player_id)
+	entity.set_multiplayer_authority(player_id)
