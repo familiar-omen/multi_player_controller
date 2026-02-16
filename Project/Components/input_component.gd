@@ -1,6 +1,7 @@
 class_name InputComponent extends Component
 
 @export var camera : Camera3D
+@export var audio : AudioListener3D
 var movement : Vector2
 
 func _physics_process(_delta: float) -> void:
@@ -13,3 +14,4 @@ func set_auth(player_id : int):
 	entity.set_multiplayer_authority(player_id)
 	if is_multiplayer_authority():
 		camera.make_current()
+		audio.make_current()

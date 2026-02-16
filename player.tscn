@@ -31,9 +31,10 @@ height = 1.8
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1689822007]
 replication_config = SubResource("SceneReplicationConfig_2hs0m")
 
-[node name="InputComponent" type="Node" parent="." unique_id=674188018 node_paths=PackedStringArray("camera")]
+[node name="InputComponent" type="Node" parent="." unique_id=674188018 node_paths=PackedStringArray("camera", "audio")]
 script = ExtResource("1_2hs0m")
 camera = NodePath("../Head/Camera3D")
+audio = NodePath("../Head/Camera3D/AudioListener3D")
 metadata/_custom_type_script = "uid://b35rn4471h1pw"
 
 [node name="Movement" type="Node" parent="." unique_id=2025839233]
@@ -68,7 +69,6 @@ shape = SubResource("SphereShape3D_ioo17")
 target_position = Vector3(0, 0, -20)
 
 [node name="AudioListener3D" type="AudioListener3D" parent="Head/Camera3D" unique_id=396018057]
-current = true
 
 [node name="HeadBob" type="Node" parent="Head/Camera3D" unique_id=1545710497]
 script = ExtResource("5_nvl01")
