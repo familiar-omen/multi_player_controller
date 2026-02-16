@@ -1,0 +1,3 @@
+[submodule "Components"]
+	path = Components
+	url = https://github.com/familiar-omen/godot-components
