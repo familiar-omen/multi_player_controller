@@ -19,6 +19,7 @@ func invite_tester(invite_lobby_id : int):
 		var friend_id = Steam.getFriendByIndex(friend_index, Steam.FriendFlags.FRIEND_FLAG_ALL)
 		if Steam.getFriendPersonaName(friend_id) == "familiar_omen_testing":
 			Steam.inviteUserToLobby(invite_lobby_id, friend_id)
+			Steam.sendMessageToUser(friend_id, str(invite_lobby_id).to_utf8_buffer(), Steam.IDENTITY_TYPE_STEAMID, 0)
 			print("Invited testing account")
 
 func _ready() -> void:
@@ -70,7 +71,8 @@ func _on_lobby_created(result : int, new_lobby_id : int):
 		
 		lobby_created.emit(lobby_id)
 		lobby_created_as_text.emit(str(lobby_id))
-		invite_tester(new_lobby_id)
+		print("Lobby ID: ", lobby_id)
+		#invite_tester(new_lobby_id)
 
 func _add_player(id : int = 1):
 	print("Player joined: ", id)
