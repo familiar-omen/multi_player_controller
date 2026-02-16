@@ -8,10 +8,6 @@ var velocity : Velocity3D
 var grounded : IsGroundedComponent
 var input : InputComponent
 
-#@export var move_input : InputVector
-#@export var sprint_button : InputButton
-#@export var jump_button : InputButton
-
 func _component_attached():
 	velocity = Components.get_or_add(Velocity3D).on(entity)
 	grounded = Components.get_or_add(IsGroundedComponent).on(entity)
@@ -34,13 +30,12 @@ func _physics_process(delta: float) -> void:
 	velocity.velocity = adjust_velocity(velocity.velocity, delta)
 
 func adjust_velocity(velocity : Vector3, delta : float):
-	#var grounded = grounded.is_grounded
+	var grounded = grounded.is_grounded
 	
-	#if jump_button.is_just_pressed and grounded:
-		#velocity.y = JUMP_VELOCITY
+	if input.jump and grounded:
+		velocity.y = JUMP_VELOCITY
 	
-	#var speed = SPRINT_SPEED if sprint_button.is_pressed else SPEED
-	var speed = SPEED
+	var speed = SPRINT_SPEED if input.sprint else SPEED
 	
 	var input_dir = input.movement
 	var direction = (entity.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()

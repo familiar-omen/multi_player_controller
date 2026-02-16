@@ -3,10 +3,14 @@ class_name InputComponent extends Component
 @export var camera : Camera3D
 @export var audio : AudioListener3D
 var movement : Vector2
+var jump : bool
+var sprint : bool
 
 func _physics_process(_delta: float) -> void:
 	if is_multiplayer_authority():
 		movement = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+		jump = Input.is_action_just_pressed("jump")
+		sprint = Input.is_action_pressed("sprint")
 
 @rpc("call_local")
 func set_auth(player_id : int):
