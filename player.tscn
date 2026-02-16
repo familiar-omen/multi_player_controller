@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dbms2jkct43ij" path="res://Project/Components/movement_component.gd" id="1_1jxqw"]
 [ext_resource type="Script" uid="uid://b35rn4471h1pw" path="res://Project/Components/input_component.gd" id="1_2hs0m"]
+[ext_resource type="Script" uid="uid://0i5d0yx4ndoc" path="res://Components/Base/Velocity3D.gd" id="1_b26j0"]
 [ext_resource type="Script" uid="uid://bj0x6p4sp53fo" path="res://Project/Components/look_component.gd" id="2_dw050"]
 [ext_resource type="Script" uid="uid://ddn25iimi0fma" path="res://Project/Components/gravity_component.gd" id="3_b26j0"]
 [ext_resource type="AudioStream" uid="uid://ddvruvv2183s" path="res://assets/freesound_community-concrete-footsteps-6752.mp3" id="4_n7ghd"]
@@ -10,15 +11,12 @@
 [ext_resource type="Script" uid="uid://cj4l1ldjqy20f" path="res://Project/Components/vault_component.gd" id="8_dw050"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2hs0m"]
-properties/0/path = NodePath("InputComponent:movement")
+properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
-properties/1/path = NodePath(".:position")
+properties/1/path = NodePath(".:velocity")
 properties/1/spawn = true
 properties/1/replication_mode = 1
-properties/2/path = NodePath(".:velocity")
-properties/2/spawn = true
-properties/2/replication_mode = 1
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_gv5m4"]
 height = 1.8
@@ -33,6 +31,11 @@ height = 1.8
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1689822007]
 replication_config = SubResource("SceneReplicationConfig_2hs0m")
 
+[node name="Velocity3D" type="Node" parent="." unique_id=13675544]
+script = ExtResource("1_b26j0")
+drag = 0.1
+metadata/_custom_type_script = "uid://0i5d0yx4ndoc"
+
 [node name="InputComponent" type="Node" parent="." unique_id=674188018 node_paths=PackedStringArray("camera", "audio")]
 script = ExtResource("1_2hs0m")
 camera = NodePath("../Head/Camera3D")
@@ -41,6 +44,7 @@ metadata/_custom_type_script = "uid://b35rn4471h1pw"
 
 [node name="Movement" type="Node" parent="." unique_id=2025839233]
 script = ExtResource("1_1jxqw")
+acceleration = 4.0
 
 [node name="LookComponent" type="Node" parent="." unique_id=962373716 node_paths=PackedStringArray("vertical_look")]
 script = ExtResource("2_dw050")

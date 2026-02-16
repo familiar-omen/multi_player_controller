@@ -2,6 +2,7 @@ class_name MovementComponent extends State
 
 @export var SPEED = 5.0
 @export var SPRINT_SPEED = 8.0
+@export var acceleration = 8.0
 @export var JUMP_VELOCITY = 4.5
 
 var velocity : Velocity3D
@@ -40,7 +41,7 @@ func adjust_velocity(velocity : Vector3, delta : float):
 	var direction = (entity.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	if direction or grounded:
-		velocity.x = lerpf(velocity.x, direction.x * speed, delta * speed)
-		velocity.z = lerpf(velocity.z, direction.z * speed, delta * speed)
+		velocity.x = move_toward(velocity.x, direction.x * speed, delta * speed * acceleration)
+		velocity.z = move_toward(velocity.z, direction.z * speed, delta * speed * acceleration)
 	
 	return velocity
