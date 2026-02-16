@@ -63,7 +63,6 @@ func _on_lobby_created(result : int, new_lobby_id : int):
 		peer = SteamMultiplayerPeer.new()
 		peer.server_relay = true
 		peer.create_host()
-		
 		multiplayer.multiplayer_peer = peer
 		multiplayer.peer_connected.connect(_add_player)
 		multiplayer.peer_disconnected.connect(_remove_player)
@@ -77,11 +76,14 @@ func _on_lobby_created(result : int, new_lobby_id : int):
 func _add_player(id : int = 1):
 	print("Player joined: ", id)
 	var player = player_scene.instantiate()
-	Components.get_first(InputComponent).on(player).set_multiplayer_authority(id)
-	#player.set_multiplayer_authority(id)
+	var input = Components.get_first(InputComponent).on(player) as InputComponent
+	input.set_multiplayer_authority(0)
+	
 	player.name = "Player_" + str(id)
 	player_objects.set(id, player)
-	entity.add_child.call_deferred(player)
+	entity.add_child(player)
+	input.set_auth.rpc.call_deferred(id)
+	
 
 func _remove_player(id : int):
 	print("Player left: ", id)
