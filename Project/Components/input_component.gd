@@ -6,6 +6,10 @@ var movement : Vector2
 var jump : bool
 var sprint : bool
 
+func _init() -> void:
+	# Process before state_machines
+	process_priority = -11
+
 func _physics_process(_delta: float) -> void:
 	if is_multiplayer_authority():
 		movement = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
