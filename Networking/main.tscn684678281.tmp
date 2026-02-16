@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://dnl02vr507qrx"]
+
+[ext_resource type="Script" uid="uid://cq8f0e3h6ctmy" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://bfk1bi6d4ud3l" path="res://player.tscn" id="2_0xm2m"]
+
+[sub_resource type="GDScript" id="GDScript_0xm2m"]
+script/source = "extends Button
+
+@export
+var id_input_field : LineEdit
+
+signal join_lobby(id : int)
+
+func _ready() -> void:
+	pressed.connect(_join_lobby)
+
+func _join_lobby():
+	join_lobby.emit(id_input_field.text.to_int())
+"
+
+[node name="Main" type="Node2D" unique_id=1172846171]
+script = ExtResource("1_ig7tw")
+player_scene = ExtResource("2_0xm2m")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=154161702]
+_spawnable_scenes = PackedStringArray("uid://bfk1bi6d4ud3l")
+spawn_path = NodePath("..")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1825697189]
+offset_right = 168.0
+offset_bottom = 101.0
+
+[node name="Host Lobby Button" type="Button" parent="VBoxContainer" unique_id=1311575371]
+layout_mode = 2
+text = "Host"
+
+[node name="Join Lobby Button" type="Button" parent="VBoxContainer" unique_id=1009150223 node_paths=PackedStringArray("id_input_field")]
+layout_mode = 2
+text = "Join"
+script = SubResource("GDScript_0xm2m")
+id_input_field = NodePath("../Join Lobby ID")
+
+[node name="Join Lobby ID" type="LineEdit" parent="VBoxContainer" unique_id=2076087171]
+layout_mode = 2
+placeholder_text = "Lobby ID"
+
+[connection signal="lobby_created_as_text" from="." to="VBoxContainer/Join Lobby ID" method="set_text"]
+[connection signal="pressed" from="VBoxContainer/Host Lobby Button" to="." method="host_lobby"]
+[connection signal="join_lobby" from="VBoxContainer/Join Lobby Button" to="." method="join_lobby"]

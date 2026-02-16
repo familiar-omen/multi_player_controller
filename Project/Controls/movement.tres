@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InputVector" format=3 uid="uid://cakkqgjrkl67p"]
+
+[ext_resource type="Script" uid="uid://cl8k2j15fo8fq" path="res://Project/Resources/input_vector.gd" id="1_wft88"]
+
+[resource]
+script = ExtResource("1_wft88")
+up = &"move_forward"
+down = &"move_backward"
+left = &"move_left"
+right = &"move_right"
+metadata/_custom_type_script = "uid://cl8k2j15fo8fq"

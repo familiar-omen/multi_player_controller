@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://66et8n3i30cf"]
+
+[ext_resource type="Script" uid="uid://0i5d0yx4ndoc" path="res://Components/Base/Velocity3D.gd" id="1_036b0"]
+[ext_resource type="Texture2D" uid="uid://c1h4tixkm7i50" path="res://assets/rogland_clear_night_4k.exr" id="1_dwbse"]
+[ext_resource type="Script" uid="uid://dbms2jkct43ij" path="res://ProjectComponents/movement_component.gd" id="2_aqk2v"]
+[ext_resource type="Script" uid="uid://ddh21bk2h46u8" path="res://ProjectComponents/head_bob_component.gd" id="2_fj7yv"]
+[ext_resource type="Texture2D" uid="uid://ljaujh60jqbd" path="res://assets/texture_07.png" id="2_pkg7o"]
+[ext_resource type="Script" uid="uid://bj0x6p4sp53fo" path="res://ProjectComponents/look_component.gd" id="3_aqk2v"]
+[ext_resource type="AudioStream" uid="uid://ddvruvv2183s" path="res://assets/freesound_community-concrete-footsteps-6752.mp3" id="6_pkg7o"]
+[ext_resource type="Script" uid="uid://d12kacqoiascg" path="res://index_test.gd" id="8_gbfbk"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_gbfbk"]
+panorama = ExtResource("1_dwbse")
+
+[sub_resource type="Sky" id="Sky_ioo17"]
+sky_material = SubResource("PanoramaSkyMaterial_gbfbk")
+
+[sub_resource type="Environment" id="Environment_wse8f"]
+background_mode = 2
+sky = SubResource("Sky_ioo17")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ic0uy"]
+albedo_texture = ExtResource("2_pkg7o")
+uv1_triplanar = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gv5m4"]
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f3sb7"]
+height = 1.8
+
+[node name="World" type="Node3D" unique_id=1468674945]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1973909031]
+environment = SubResource("Environment_wse8f")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1057528719]
+use_collision = true
+size = Vector3(38.180664, 0.04272461, 24.786865)
+material = SubResource("StandardMaterial3D_ic0uy")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=423202918]
+transform = Transform3D(0.7071068, 0.61237246, -0.35355338, 0, 0.49999997, 0.86602545, 0.7071068, -0.61237246, 0.35355338, 0, 3, 0)
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=873050060]
+
+[node name="Velocity3D" type="Node" parent="Player" unique_id=1839643600]
+script = ExtResource("1_036b0")
+metadata/_custom_type_script = "uid://0i5d0yx4ndoc"
+
+[node name="Movement" type="Node" parent="Player" unique_id=1921792383]
+script = ExtResource("2_aqk2v")
+metadata/_custom_type_script = "uid://dbms2jkct43ij"
+
+[node name="LookComponent" type="Node" parent="Player" unique_id=564896757 node_paths=PackedStringArray("vertical_look")]
+script = ExtResource("3_aqk2v")
+vertical_look = NodePath("../Head/Camera3D")
+metadata/_custom_type_script = "uid://bj0x6p4sp53fo"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=1869680390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("CapsuleMesh_gv5m4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1092124588]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_f3sb7")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Player" unique_id=171973708]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4890667, 0)
+stream = ExtResource("6_pkg7o")
+
+[node name="Head" type="Node3D" parent="Player" unique_id=1547741778]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/Head" unique_id=240789679]
+
+[node name="AudioListener3D" type="AudioListener3D" parent="Player/Head/Camera3D" unique_id=1988904905]
+current = true
+
+[node name="HeadBob" type="Node" parent="Player/Head/Camera3D" unique_id=1362944535]
+script = ExtResource("2_fj7yv")
+frequency = 2.355
+metadata/_custom_type_script = "uid://ddh21bk2h46u8"
+
+[node name="index_test" type="Node" parent="." unique_id=354377189]
+script = ExtResource("8_gbfbk")
+metadata/_custom_type_script = "uid://d12kacqoiascg"

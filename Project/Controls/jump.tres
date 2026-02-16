@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="InputButton" format=3 uid="uid://dncnh4ihjbtxd"]
+
+[ext_resource type="Script" uid="uid://ifyga4jtm86y" path="res://Project/Resources/input_button.gd" id="1_b1aw7"]
+
+[resource]
+script = ExtResource("1_b1aw7")
+action_name = &"jump"
+metadata/_custom_type_script = "uid://ifyga4jtm86y"
