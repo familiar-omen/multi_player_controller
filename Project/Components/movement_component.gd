@@ -17,8 +17,7 @@ func _component_attached():
 	state_machine.register_state(self)
 
 func valid():
-	return input.movement
-	 #or jump_button.is_just_pressed
+	return input.movement or input.jump
 
 func interruptable():
 	return true
