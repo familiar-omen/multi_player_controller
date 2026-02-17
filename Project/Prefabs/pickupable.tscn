@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://bjt5vfmlx3lk5"]
+
+[ext_resource type="Script" uid="uid://byarmpikkco4p" path="res://Project/Components/collectable.gd" id="1_fanb4"]
+[ext_resource type="Script" uid="uid://cp8v5mvg1esea" path="res://Components/Base/ComponentConnector.gd" id="2_vr5ho"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_fanb4"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_vr5ho"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_vr5ho"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:linear_velocity")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="Pickupable" type="RigidBody3D" unique_id=1051573675]
+
+[node name="CollectableComponent" type="Node" parent="." unique_id=237787255]
+script = ExtResource("1_fanb4")
+metadata/_custom_type_script = "uid://byarmpikkco4p"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=790267110]
+shape = SubResource("SphereShape3D_fanb4")
+
+[node name="CollectionZone" type="Area3D" parent="." unique_id=698657518]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollectionZone" unique_id=176804126]
+shape = SubResource("SphereShape3D_fanb4")
+
+[node name="ComponentConnector" type="Node" parent="CollectionZone" unique_id=36558623 node_paths=PackedStringArray("components")]
+script = ExtResource("2_vr5ho")
+components = [NodePath("../../CollectableComponent")]
+metadata/_custom_type_script = "uid://cp8v5mvg1esea"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=182971179]
+mesh = SubResource("SphereMesh_vr5ho")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=2133071101]
+replication_config = SubResource("SceneReplicationConfig_vr5ho")

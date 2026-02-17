@@ -6,12 +6,14 @@ var vault_clearance := 2.0
 
 var is_grounded : bool
 var _velocity_component : Velocity3D
+var input : InputComponent
 
 var vaulting_to : Vector3
 
 func _component_attached():
 	var _is_grounded_component : IsGroundedComponent = Components.get_first(IsGroundedComponent).on_ancestors_of(entity)
 	var state_machine = Components.get_first(DispersedStateMachine).on_ancestors_of(entity) as DispersedStateMachine
+	input = Components.get_first(InputComponent).on_ancestors_of(entity)
 	state_machine.register_state(self)
 	_velocity_component = Components.get_first(Velocity3D).on_ancestors_of(entity)
 	await detached
@@ -19,7 +21,7 @@ func _component_attached():
 	_velocity_component = null
 
 func valid():
-	if Input.is_action_pressed("jump"):
+	if input.vault:
 		var target_ledge = raycast_look_at()
 		var target_point = raycast_target()
 		
@@ -30,7 +32,7 @@ func interruptable():
 	return false
 
 func finished():
-	return Input.is_action_just_released("jump") or (_velocity_component.entity.global_position.y > vaulting_to.y)
+	return not input.vault or (_velocity_component.entity.global_position.y > vaulting_to.y)
 
 func enter():
 	vaulting_to = raycast_target() + Vector3.UP * 0.2

@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://66et8n3i30cf"]
+
+[ext_resource type="Texture2D" uid="uid://c1h4tixkm7i50" path="res://assets/rogland_clear_night_4k.exr" id="1_cwo1r"]
+[ext_resource type="Texture2D" uid="uid://ljaujh60jqbd" path="res://assets/texture_07.png" id="2_jf48i"]
+[ext_resource type="Script" uid="uid://cq8f0e3h6ctmy" path="res://Networking/lobby.gd" id="3_61uws"]
+[ext_resource type="PackedScene" uid="uid://b75ft2n5mr6wf" path="res://Project/Prefabs/player.tscn" id="4_50jej"]
+[ext_resource type="PackedScene" uid="uid://bjt5vfmlx3lk5" path="res://Project/Prefabs/pickupable.tscn" id="5_jf48i"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_gbfbk"]
+panorama = ExtResource("1_cwo1r")
+
+[sub_resource type="Sky" id="Sky_ioo17"]
+sky_material = SubResource("PanoramaSkyMaterial_gbfbk")
+
+[sub_resource type="Environment" id="Environment_wse8f"]
+background_mode = 2
+sky = SubResource("Sky_ioo17")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ic0uy"]
+albedo_texture = ExtResource("2_jf48i")
+uv1_triplanar = true
+
+[sub_resource type="GDScript" id="GDScript_aqk2v"]
+script/source = "extends Button
+
+@export
+var id_input_field : LineEdit
+
+signal join_lobby(id : int)
+
+func _ready() -> void:
+	pressed.connect(_join_lobby)
+
+func _join_lobby():
+	join_lobby.emit(id_input_field.text.to_int())
+"
+
+[node name="World" type="Node3D" unique_id=1468674945]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1973909031]
+environment = SubResource("Environment_wse8f")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=423202918]
+transform = Transform3D(0.7071068, 0.61237246, -0.35355338, 0, 0.49999997, 0.86602545, 0.7071068, -0.61237246, 0.35355338, 0, 3, 0)
+
+[node name="Terrain" type="Node3D" parent="." unique_id=11690060]
+
+[node name="Floor" type="CSGBox3D" parent="Terrain" unique_id=1057528719]
+use_collision = true
+size = Vector3(38.180664, 0.04272461, 24.786865)
+material = SubResource("StandardMaterial3D_ic0uy")
+
+[node name="Vault" type="CSGBox3D" parent="Terrain" unique_id=1487052757]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.171692, 1.0123291, 10.189392)
+use_collision = true
+size = Vector3(8.543335, 2.0673828, 4.408081)
+material = SubResource("StandardMaterial3D_ic0uy")
+
+[node name="Covering" type="CSGBox3D" parent="Terrain" unique_id=1899832333]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7150574, 4.549905, 10.189392)
+use_collision = true
+size = Vector3(8.543335, 2.0673828, 4.408081)
+material = SubResource("StandardMaterial3D_ic0uy")
+
+[node name="Platform" type="CSGBox3D" parent="Terrain" unique_id=1926594477]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.452213, 10.144652, 0)
+use_collision = true
+size = Vector3(19.137695, 3.7946777, 24.786865)
+material = SubResource("StandardMaterial3D_ic0uy")
+
+[node name="GrapplePoint" type="CSGBox3D" parent="Terrain" unique_id=1135451357]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.834208, 18.674767, 0)
+use_collision = true
+size = Vector3(8.3172, 3.7946777, 8.650391)
+material = SubResource("StandardMaterial3D_ic0uy")
+
+[node name="LobbyComponent" type="Node" parent="." unique_id=554098998]
+script = ExtResource("3_61uws")
+player_scene = ExtResource("4_50jej")
+metadata/_custom_type_script = "uid://cq8f0e3h6ctmy"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=227515825]
+_spawnable_scenes = PackedStringArray("uid://b75ft2n5mr6wf")
+spawn_path = NodePath("..")
+
+[node name="Networking Menu" type="VBoxContainer" parent="." unique_id=1752998108]
+offset_right = 168.0
+offset_bottom = 101.0
+
+[node name="Host Lobby Button" type="Button" parent="Networking Menu" unique_id=1899920316]
+layout_mode = 2
+text = "Host"
+
+[node name="Join Lobby Button" type="Button" parent="Networking Menu" unique_id=1881654419 node_paths=PackedStringArray("id_input_field")]
+layout_mode = 2
+text = "Join"
+script = SubResource("GDScript_aqk2v")
+id_input_field = NodePath("../Join Lobby ID")
+
+[node name="Join Lobby ID" type="LineEdit" parent="Networking Menu" unique_id=433671825]
+layout_mode = 2
+placeholder_text = "Lobby ID"
+
+[node name="Pickupable" parent="." unique_id=1051573675 instance=ExtResource("5_jf48i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.412312, -5.5430727)
+
+[connection signal="lobby_created_as_text" from="LobbyComponent" to="Networking Menu/Join Lobby ID" method="set_text"]
+[connection signal="pressed" from="Networking Menu/Host Lobby Button" to="LobbyComponent" method="host_lobby"]
+[connection signal="join_lobby" from="Networking Menu/Join Lobby Button" to="LobbyComponent" method="join_lobby"]

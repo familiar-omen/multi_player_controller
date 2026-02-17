@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://b75ft2n5mr6wf"]
+
+[ext_resource type="Script" uid="uid://dbms2jkct43ij" path="res://Project/Components/movement_component.gd" id="1_1jxqw"]
+[ext_resource type="Script" uid="uid://b35rn4471h1pw" path="res://Project/Components/input_component.gd" id="1_2hs0m"]
+[ext_resource type="Script" uid="uid://0i5d0yx4ndoc" path="res://Components/Base/Velocity3D.gd" id="1_b26j0"]
+[ext_resource type="Script" uid="uid://bj0x6p4sp53fo" path="res://Project/Components/look_component.gd" id="2_dw050"]
+[ext_resource type="Script" uid="uid://ddn25iimi0fma" path="res://Project/Components/gravity_component.gd" id="3_b26j0"]
+[ext_resource type="AudioStream" uid="uid://ddvruvv2183s" path="res://assets/freesound_community-concrete-footsteps-6752.mp3" id="4_n7ghd"]
+[ext_resource type="Script" uid="uid://ddh21bk2h46u8" path="res://Project/Components/head_bob_component.gd" id="5_nvl01"]
+[ext_resource type="Script" uid="uid://bs58xpgt7s483" path="res://Project/Components/grapling_hook.gd" id="7_1jxqw"]
+[ext_resource type="Script" uid="uid://cj4l1ldjqy20f" path="res://Project/Components/vault_component.gd" id="8_dw050"]
+[ext_resource type="Script" uid="uid://cp8v5mvg1esea" path="res://Components/Base/ComponentConnector.gd" id="10_0i8ct"]
+[ext_resource type="Script" uid="uid://dsxsvb6wvc7gf" path="res://Project/Components/pickup_component.gd" id="11_d24er"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_2hs0m"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:velocity")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gv5m4"]
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f3sb7"]
+height = 1.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ioo17"]
+
+[node name="Player" type="CharacterBody3D" unique_id=35576554]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1689822007]
+replication_config = SubResource("SceneReplicationConfig_2hs0m")
+
+[node name="Velocity3D" type="Node" parent="." unique_id=13675544]
+script = ExtResource("1_b26j0")
+drag = 0.1
+metadata/_custom_type_script = "uid://0i5d0yx4ndoc"
+
+[node name="InputComponent" type="Node" parent="." unique_id=674188018 node_paths=PackedStringArray("camera", "audio")]
+script = ExtResource("1_2hs0m")
+camera = NodePath("../Head/Camera3D")
+audio = NodePath("../Head/Camera3D/AudioListener3D")
+metadata/_custom_type_script = "uid://b35rn4471h1pw"
+
+[node name="Movement" type="Node" parent="." unique_id=2025839233]
+script = ExtResource("1_1jxqw")
+acceleration = 4.0
+
+[node name="LookComponent" type="Node" parent="." unique_id=962373716 node_paths=PackedStringArray("vertical_look")]
+script = ExtResource("2_dw050")
+vertical_look = NodePath("../Head/Camera3D")
+
+[node name="GravityComponent" type="Node" parent="." unique_id=706421495]
+script = ExtResource("3_b26j0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=748913515]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("CapsuleMesh_gv5m4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=730557379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_f3sb7")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=2000421018]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4890667, 0)
+stream = ExtResource("4_n7ghd")
+
+[node name="Head" type="Node3D" parent="." unique_id=1864140348]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=1117060947]
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="Head/Camera3D" unique_id=1957258019]
+visible = false
+shape = SubResource("SphereShape3D_ioo17")
+target_position = Vector3(0, 0, -20)
+
+[node name="AudioListener3D" type="AudioListener3D" parent="Head/Camera3D" unique_id=396018057]
+
+[node name="HeadBob" type="Node" parent="Head/Camera3D" unique_id=1545710497]
+script = ExtResource("5_nvl01")
+frequency = 2.355
+
+[node name="GrapplingGun" type="Node" parent="Head/Camera3D" unique_id=851946302]
+script = ExtResource("7_1jxqw")
+metadata/_custom_type_script = "uid://bs58xpgt7s483"
+
+[node name="VaultComponent" type="Node" parent="Head/Camera3D" unique_id=953891518]
+script = ExtResource("8_dw050")
+metadata/_custom_type_script = "uid://cj4l1ldjqy20f"
+
+[node name="Marker3D" type="Marker3D" parent="Head/Camera3D" unique_id=367438947]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.47195005, -1.2933229)
+
+[node name="RayCast3D" type="RayCast3D" parent="Head/Camera3D" unique_id=862251768]
+target_position = Vector3(0, 0, -2.98)
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="ComponentConnector" type="Node" parent="Head/Camera3D/RayCast3D" unique_id=1665821037]
+script = ExtResource("10_0i8ct")
+metadata/_custom_type_script = "uid://cp8v5mvg1esea"
+
+[node name="PickupComponent" type="Node" parent="Head/Camera3D/RayCast3D" unique_id=810616074 node_paths=PackedStringArray("hold_point")]
+script = ExtResource("11_d24er")
+hold_point = NodePath("../../Marker3D")
+metadata/_custom_type_script = "uid://dsxsvb6wvc7gf"

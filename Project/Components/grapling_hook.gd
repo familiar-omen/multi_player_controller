@@ -10,18 +10,22 @@ var grabble_origin_offset : Vector3 = Vector3(0,1,0)
 const RAY_LENGTH = 20
 
 var _velocity_component : Velocity3D
+var input : InputComponent
+
 var grabble_point : Vector3
 
 func _component_attached():
 	_velocity_component = Components.get_first(Velocity3D).on_ancestors_of(entity)
+	input = Components.get_first(InputComponent).on_ancestors_of(entity)
+	
 	var state_machine = Components.get_first(DispersedStateMachine).on_ancestors_of(entity) as DispersedStateMachine
 	state_machine.register_state(self)
 
 func valid():
-	return Input.is_action_just_pressed("primary_click") and raycast()
+	return input.grapple and raycast()
 
 func finished():
-	return not Input.is_action_pressed("primary_click")
+	return not input.grapple
 
 func interruptable():
 	var position : Vector3 = _velocity_component.entity.global_position
