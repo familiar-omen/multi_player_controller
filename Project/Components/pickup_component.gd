@@ -22,6 +22,7 @@ func _physics_process(_delta: float) -> void:
 				held_object.reparent(hold_point)
 	
 	if not input.grap and held_object:
-		held_object.process_mode = Node.PROCESS_MODE_INHERIT
-		held_object.reparent(get_tree().root.get_child(0))
+		if held_object.get_parent() == hold_point:
+			held_object.process_mode = Node.PROCESS_MODE_INHERIT
+			held_object.reparent(get_tree().root.get_child(0))
 		held_object = null
