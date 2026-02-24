@@ -37,7 +37,7 @@ func move_networked_properties(from, to):
 	for property in networked_properties:
 		to.set(property, from.get(property))
 
-@rpc()
+@rpc("unreliable")
 func share_network_data(new_network_data : Dictionary):
 	move_networked_properties(new_network_data, self)
 
