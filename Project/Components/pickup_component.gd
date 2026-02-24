@@ -25,6 +25,8 @@ func _physics_process(_delta: float) -> void:
 
 @rpc("call_local")
 func grab(node):
+	if node is EncodedObjectAsID:
+		node = instance_from_id(node)
 	held_object = node
 	held_object.process_mode = Node.PROCESS_MODE_DISABLED
 	held_object.global_position = hold_point.global_position
