@@ -8,7 +8,8 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
-		rotate.rpc(-event.relative.x * Sensitivity, -event.relative.y * Sensitivity)
+		if is_multiplayer_authority():
+			rotate.rpc(-event.relative.x * Sensitivity, -event.relative.y * Sensitivity)
 	elif event is InputEventMouseButton:
 		if event.button_index == MouseButton.MOUSE_BUTTON_LEFT:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
