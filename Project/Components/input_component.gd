@@ -44,6 +44,7 @@ func share_network_data(new_network_data : Dictionary):
 @rpc("call_local")
 func set_auth(player_id : int):
 	set_multiplayer_authority(player_id)
+	Components.get_first(LookComponent).on(entity).set_multiplayer_authority(player_id)
 	#entity.set_multiplayer_authority(player_id)
 	if is_multiplayer_authority():
 		camera.make_current()
