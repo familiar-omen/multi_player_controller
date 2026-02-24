@@ -37,7 +37,7 @@ func move_networked_properties(from, to):
 	for property in networked_properties:
 		to.set(property, from.get(property))
 
-@rpc("unreliable")
+@rpc("unreliable_ordered")
 func share_network_data(new_network_data : Dictionary):
 	move_networked_properties(new_network_data, self)
 
@@ -45,7 +45,6 @@ func share_network_data(new_network_data : Dictionary):
 func set_auth(player_id : int):
 	set_multiplayer_authority(player_id)
 	Components.get_first(LookComponent).on(entity).set_multiplayer_authority(player_id)
-	#entity.set_multiplayer_authority(player_id)
 	if is_multiplayer_authority():
 		camera.make_current()
 		audio.make_current()

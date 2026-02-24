@@ -18,7 +18,6 @@ func _physics_process(_delta: float) -> void:
 		for connection in connector.connections.values():
 			if IAmCollectible in connection:
 				var interface = connection.get(IAmCollectible) as IAmCollectible
-				
 				grab.rpc(interface._attached_to.entity.get_path())
 	
 	if not input.grap and held_object:
