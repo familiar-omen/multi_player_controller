@@ -12,7 +12,8 @@ func _component_attached():
 	connector = Components.get_first(ComponentConnector).on_ancestors_of(entity)
 
 func _physics_process(_delta: float) -> void:
-	is_multiplayer_authority()
+	if not is_multiplayer_authority(): return
+	
 	if input.grap and not held_object:
 		for connection in connector.connections.values():
 			if IAmCollectible in connection:
