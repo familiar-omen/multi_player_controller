@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://66et8n3i30cf"]
 
-[ext_resource type="Texture2D" uid="uid://c1h4tixkm7i50" path="res://assets/rogland_clear_night_4k.exr" id="1_dwbse"]
-[ext_resource type="Texture2D" uid="uid://ljaujh60jqbd" path="res://assets/texture_07.png" id="2_pkg7o"]
-[ext_resource type="PackedScene" uid="uid://b75ft2n5mr6wf" path="res://player.tscn" id="2_tlwt5"]
-[ext_resource type="Script" uid="uid://cq8f0e3h6ctmy" path="res://Networking/lobby.gd" id="4_aqk2v"]
+[ext_resource type="Texture2D" uid="uid://c1h4tixkm7i50" path="res://assets/rogland_clear_night_4k.exr" id="1_cwo1r"]
+[ext_resource type="Texture2D" uid="uid://ljaujh60jqbd" path="res://assets/texture_07.png" id="2_jf48i"]
+[ext_resource type="Script" uid="uid://cq8f0e3h6ctmy" path="res://Networking/lobby.gd" id="3_61uws"]
+[ext_resource type="PackedScene" uid="uid://b75ft2n5mr6wf" path="res://Project/Prefabs/player.tscn" id="4_50jej"]
+[ext_resource type="PackedScene" uid="uid://bjt5vfmlx3lk5" path="res://Project/Prefabs/pickupable.tscn" id="5_jf48i"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_gbfbk"]
-panorama = ExtResource("1_dwbse")
+panorama = ExtResource("1_cwo1r")
 
 [sub_resource type="Sky" id="Sky_ioo17"]
 sky_material = SubResource("PanoramaSkyMaterial_gbfbk")
@@ -16,7 +17,7 @@ background_mode = 2
 sky = SubResource("Sky_ioo17")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ic0uy"]
-albedo_texture = ExtResource("2_pkg7o")
+albedo_texture = ExtResource("2_jf48i")
 uv1_triplanar = true
 
 [sub_resource type="GDScript" id="GDScript_aqk2v"]
@@ -74,8 +75,8 @@ size = Vector3(8.3172, 3.7946777, 8.650391)
 material = SubResource("StandardMaterial3D_ic0uy")
 
 [node name="LobbyComponent" type="Node" parent="." unique_id=554098998]
-script = ExtResource("4_aqk2v")
-player_scene = ExtResource("2_tlwt5")
+script = ExtResource("3_61uws")
+player_scene = ExtResource("4_50jej")
 metadata/_custom_type_script = "uid://cq8f0e3h6ctmy"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=227515825]
@@ -99,6 +100,9 @@ id_input_field = NodePath("../Join Lobby ID")
 [node name="Join Lobby ID" type="LineEdit" parent="Networking Menu" unique_id=433671825]
 layout_mode = 2
 placeholder_text = "Lobby ID"
+
+[node name="Pickupable" parent="." unique_id=1051573675 instance=ExtResource("5_jf48i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.412312, -5.5430727)
 
 [connection signal="lobby_created_as_text" from="LobbyComponent" to="Networking Menu/Join Lobby ID" method="set_text"]
 [connection signal="pressed" from="Networking Menu/Host Lobby Button" to="LobbyComponent" method="host_lobby"]

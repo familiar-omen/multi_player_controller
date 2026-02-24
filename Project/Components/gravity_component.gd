@@ -9,7 +9,7 @@ func _component_attached():
 
 func _component_dettached():
 	_velocity_component = null
-	
+
 func _physics_process(delta: float) -> void:
 	_velocity_component.velocity = adjust_velocity(_velocity_component.velocity, delta)
 
