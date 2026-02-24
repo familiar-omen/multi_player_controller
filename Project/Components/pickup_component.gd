@@ -17,17 +17,16 @@ func _physics_process(_delta: float) -> void:
 		for connection in connector.connections.values():
 			if IAmCollectible in connection:
 				var interface = connection.get(IAmCollectible) as IAmCollectible
-				grab.rpc(interface._attached_to.entity)
+				
+				grab.rpc(interface._attached_to.entity.get_path())
 	
 	if not input.grap and held_object:
 		if held_object.get_parent() == hold_point:
 			let_go.rpc()
 
 @rpc("call_local")
-func grab(node):
-	if node is EncodedObjectAsID:
-		node = instance_from_id(node)
-	held_object = node
+func grab(node : NodePath):
+	held_object = get_node(node)
 	held_object.process_mode = Node.PROCESS_MODE_DISABLED
 	held_object.global_position = hold_point.global_position
 	held_object.reparent(hold_point)
