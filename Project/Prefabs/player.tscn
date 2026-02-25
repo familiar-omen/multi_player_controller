@@ -44,13 +44,14 @@ camera = NodePath("../Head/Camera3D")
 audio = NodePath("../Head/Camera3D/AudioListener3D")
 metadata/_custom_type_script = "uid://b35rn4471h1pw"
 
+[node name="LookComponent" type="Node" parent="." unique_id=962373716 node_paths=PackedStringArray("vertical_look", "input")]
+script = ExtResource("2_dw050")
+vertical_look = NodePath("../Head/Camera3D")
+input = NodePath("../InputComponent")
+
 [node name="Movement" type="Node" parent="." unique_id=2025839233]
 script = ExtResource("1_1jxqw")
 acceleration = 4.0
-
-[node name="LookComponent" type="Node" parent="." unique_id=962373716 node_paths=PackedStringArray("vertical_look")]
-script = ExtResource("2_dw050")
-vertical_look = NodePath("../Head/Camera3D")
 
 [node name="GravityComponent" type="Node" parent="." unique_id=706421495]
 script = ExtResource("3_b26j0")

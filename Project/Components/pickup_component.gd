@@ -1,6 +1,7 @@
 class_name PickupComponent extends Component
 
 @export var hold_point : Marker3D
+@export var raycast : RayCast3D
 
 var input : InputComponent
 var connector : ComponentConnector
