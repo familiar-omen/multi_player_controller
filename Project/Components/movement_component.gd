@@ -32,7 +32,8 @@ func _physics_process(delta: float) -> void:
 func adjust_velocity(velocity : Vector3, delta : float):
 	var grounded = grounded.is_grounded
 	
-	if input.jump and grounded:
+	if input.jump.pressed and not input.jump.reacted and grounded:
+		input.jump.reacted = true
 		velocity.y = JUMP_VELOCITY
 	
 	var speed = SPRINT_SPEED if input.sprint else SPEED

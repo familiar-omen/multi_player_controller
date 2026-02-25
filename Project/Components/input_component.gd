@@ -9,7 +9,7 @@ const networked_properties := ["movement", "jump", "sprint", "vault", "grapple",
 @export var Sensitivity = 0.003
 
 var movement : Vector2
-var jump : bool
+var jump : Chord = Chord.new()
 var sprint : bool
 var vault : bool
 var grapple : bool
@@ -45,7 +45,7 @@ func _process(_delta: float) -> void:
 
 func gather_input():
 	movement = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	jump = true if Input.is_action_just_pressed("jump") else jump
+	jump.pressed = true if Input.is_action_just_pressed("jump") else jump.pressed
 	sprint = Input.is_action_pressed("sprint")
 	grapple = Input.is_action_pressed("secondary_click")
 	grap = Input.is_action_pressed("primary_click")
@@ -59,7 +59,7 @@ func gather_input():
 
 func _physics_process(_delta: float) -> void:
 	if is_multiplayer_authority():
-		jump = false
+		jump.pressed = false
 
 func move_networked_properties(from, to):
 	for property in networked_properties:
@@ -76,3 +76,11 @@ func set_auth(player_id : int):
 	if is_multiplayer_authority():
 		camera.make_current()
 		audio.make_current()
+
+class Chord:
+	var pressed : bool:
+		set(value): 
+			if pressed != value:
+				reacted = false
+				pressed = value
+	var reacted : bool
