@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://dbms2jkct43ij" path="res://Project/Components/movement_component.gd" id="1_1jxqw"]
 [ext_resource type="Script" uid="uid://b35rn4471h1pw" path="res://Project/Components/input_component.gd" id="1_2hs0m"]
+[ext_resource type="Script" uid="uid://bakrvoig2rifr" path="res://Project/Components/DispersedStateMachine.gd" id="1_8xmd7"]
 [ext_resource type="Script" uid="uid://0i5d0yx4ndoc" path="res://Components/Base/Velocity3D.gd" id="1_b26j0"]
 [ext_resource type="Script" uid="uid://bj0x6p4sp53fo" path="res://Project/Components/look_component.gd" id="2_dw050"]
 [ext_resource type="Script" uid="uid://ddn25iimi0fma" path="res://Project/Components/gravity_component.gd" id="3_b26j0"]
+[ext_resource type="Script" uid="uid://b7xfx8p87holy" path="res://Project/Components/IsGroundedComponent.gd" id="4_104hj"]
 [ext_resource type="AudioStream" uid="uid://ddvruvv2183s" path="res://assets/freesound_community-concrete-footsteps-6752.mp3" id="4_n7ghd"]
 [ext_resource type="Script" uid="uid://ddh21bk2h46u8" path="res://Project/Components/head_bob_component.gd" id="5_nvl01"]
 [ext_resource type="Script" uid="uid://bs58xpgt7s483" path="res://Project/Components/grapling_hook.gd" id="7_1jxqw"]
@@ -26,17 +28,12 @@ height = 1.8
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f3sb7"]
 height = 1.8
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_ioo17"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_104hj"]
 
 [node name="Player" type="CharacterBody3D" unique_id=35576554]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1689822007]
 replication_config = SubResource("SceneReplicationConfig_2hs0m")
-
-[node name="Velocity3D" type="Node" parent="." unique_id=13675544]
-script = ExtResource("1_b26j0")
-drag = 0.1
-metadata/_custom_type_script = "uid://0i5d0yx4ndoc"
 
 [node name="InputComponent" type="Node" parent="." unique_id=674188018 node_paths=PackedStringArray("camera", "audio")]
 script = ExtResource("1_2hs0m")
@@ -44,14 +41,62 @@ camera = NodePath("../Head/Camera3D")
 audio = NodePath("../Head/Camera3D/AudioListener3D")
 metadata/_custom_type_script = "uid://b35rn4471h1pw"
 
+[node name="MovementStateMachine" type="Node" parent="." unique_id=664911466]
+script = ExtResource("1_8xmd7")
+metadata/_custom_type_script = "uid://bakrvoig2rifr"
+
+[node name="Movement" type="Node" parent="MovementStateMachine" unique_id=2025839233 node_paths=PackedStringArray("c_velocity", "c_grounded", "c_input")]
+script = ExtResource("1_1jxqw")
+acceleration = 4.0
+c_velocity = NodePath("../../Velocity3D")
+c_grounded = NodePath("../../IsGroundedComponent")
+c_input = NodePath("../../InputComponent")
+
+[node name="HeadBob" type="Node" parent="MovementStateMachine/Movement" unique_id=1545710497 node_paths=PackedStringArray("c_velocity", "c_grounded", "c_head", "c_audoplayer")]
+script = ExtResource("5_nvl01")
+frequency = 2.355
+c_velocity = NodePath("../../../Velocity3D")
+c_grounded = NodePath("../../../IsGroundedComponent")
+c_head = NodePath("../../../Head/Camera3D")
+c_audoplayer = NodePath("../../../AudioStreamPlayer3D")
+
+[node name="GrapplingGun" type="Node" parent="MovementStateMachine" unique_id=851946302 node_paths=PackedStringArray("c_shapecast", "c_velocity", "c_input")]
+script = ExtResource("7_1jxqw")
+c_shapecast = NodePath("../../Head/Camera3D/GraplingRaycast")
+c_velocity = NodePath("../../Velocity3D")
+c_input = NodePath("../../InputComponent")
+metadata/_custom_type_script = "uid://bs58xpgt7s483"
+
+[node name="VaultComponent" type="Node" parent="MovementStateMachine" unique_id=953891518 node_paths=PackedStringArray("c_grounded", "c_velocity", "c_input", "c_shapecast")]
+script = ExtResource("8_dw050")
+c_grounded = NodePath("../../IsGroundedComponent")
+c_velocity = NodePath("../../Velocity3D")
+c_input = NodePath("../../InputComponent")
+c_shapecast = NodePath("../../Head/Camera3D/VaultRaycast")
+metadata/_custom_type_script = "uid://cj4l1ldjqy20f"
+
+[node name="PickupComponent" type="Node" parent="." unique_id=810616074 node_paths=PackedStringArray("hold_point", "input", "connector")]
+script = ExtResource("11_d24er")
+hold_point = NodePath("../Head/Camera3D/PickupPoint")
+input = NodePath("../InputComponent")
+connector = NodePath("../Head/Camera3D/PickupRaycast/ComponentConnector")
+metadata/_custom_type_script = "uid://dsxsvb6wvc7gf"
+
+[node name="IsGroundedComponent" type="Node" parent="." unique_id=1202718598 node_paths=PackedStringArray("c_velocity")]
+script = ExtResource("4_104hj")
+friction = 2.0
+c_velocity = NodePath("../Velocity3D")
+metadata/_custom_type_script = "uid://b7xfx8p87holy"
+
+[node name="Velocity3D" type="Node" parent="." unique_id=13675544]
+script = ExtResource("1_b26j0")
+drag = 0.1
+metadata/_custom_type_script = "uid://0i5d0yx4ndoc"
+
 [node name="LookComponent" type="Node" parent="." unique_id=962373716 node_paths=PackedStringArray("vertical_look", "input")]
 script = ExtResource("2_dw050")
 vertical_look = NodePath("../Head/Camera3D")
 input = NodePath("../InputComponent")
-
-[node name="Movement" type="Node" parent="." unique_id=2025839233]
-script = ExtResource("1_1jxqw")
-acceleration = 4.0
 
 [node name="GravityComponent" type="Node" parent="." unique_id=706421495]
 script = ExtResource("3_b26j0")
@@ -73,38 +118,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=1117060947]
 
-[node name="ShapeCast3D" type="ShapeCast3D" parent="Head/Camera3D" unique_id=1957258019]
-visible = false
-shape = SubResource("SphereShape3D_ioo17")
-target_position = Vector3(0, 0, -20)
-
 [node name="AudioListener3D" type="AudioListener3D" parent="Head/Camera3D" unique_id=396018057]
 
-[node name="HeadBob" type="Node" parent="Head/Camera3D" unique_id=1545710497]
-script = ExtResource("5_nvl01")
-frequency = 2.355
-
-[node name="GrapplingGun" type="Node" parent="Head/Camera3D" unique_id=851946302]
-script = ExtResource("7_1jxqw")
-metadata/_custom_type_script = "uid://bs58xpgt7s483"
-
-[node name="VaultComponent" type="Node" parent="Head/Camera3D" unique_id=953891518]
-script = ExtResource("8_dw050")
-metadata/_custom_type_script = "uid://cj4l1ldjqy20f"
-
-[node name="Marker3D" type="Marker3D" parent="Head/Camera3D" unique_id=367438947]
+[node name="PickupPoint" type="Marker3D" parent="Head/Camera3D" unique_id=367438947]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.47195005, -1.2933229)
 
-[node name="RayCast3D" type="RayCast3D" parent="Head/Camera3D" unique_id=862251768]
+[node name="GraplingRaycast" type="ShapeCast3D" parent="Head/Camera3D" unique_id=130838999]
+shape = SubResource("SphereShape3D_104hj")
+target_position = Vector3(0, 0, -20)
+max_results = 1
+
+[node name="VaultRaycast" type="RayCast3D" parent="Head/Camera3D" unique_id=1847697114]
+target_position = Vector3(0, 0, -0.8)
+
+[node name="PickupRaycast" type="RayCast3D" parent="Head/Camera3D" unique_id=862251768]
 target_position = Vector3(0, 0, -2.98)
 collide_with_areas = true
 collide_with_bodies = false
 
-[node name="ComponentConnector" type="Node" parent="Head/Camera3D/RayCast3D" unique_id=1665821037]
+[node name="ComponentConnector" type="Node" parent="Head/Camera3D/PickupRaycast" unique_id=1665821037]
 script = ExtResource("10_0i8ct")
 metadata/_custom_type_script = "uid://cp8v5mvg1esea"
-
-[node name="PickupComponent" type="Node" parent="Head/Camera3D/RayCast3D" unique_id=810616074 node_paths=PackedStringArray("hold_point")]
-script = ExtResource("11_d24er")
-hold_point = NodePath("../../Marker3D")
-metadata/_custom_type_script = "uid://dsxsvb6wvc7gf"

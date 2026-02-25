@@ -5,6 +5,14 @@ var current_state : State
 
 func _init() -> void:
 	process_physics_priority = -10
+	
+	child_entered_tree.connect(redirect_component_attachment)
+
+func redirect_component_attachment(child):
+	if child is State:
+		child._detach_component()
+		child._attach_component(entity)
+		register_state(child)
 
 func register_state(state : State):
 	state.process_mode = Node.PROCESS_MODE_DISABLED

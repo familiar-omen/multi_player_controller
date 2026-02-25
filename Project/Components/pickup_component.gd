@@ -1,16 +1,10 @@
-class_name PickupComponent extends Component
+class_name PickupComponent extends State
 
 @export var hold_point : Marker3D
-@export var raycast : RayCast3D
-
-var input : InputComponent
-var connector : ComponentConnector
+@export var input : InputComponent
+@export var connector : ComponentConnector
 
 var held_object : Node3D
-
-func _component_attached():
-	input = Components.get_first(InputComponent).on_ancestors_of(entity)
-	connector = Components.get_first(ComponentConnector).on_ancestors_of(entity)
 
 func _physics_process(_delta: float) -> void:
 	if not is_multiplayer_authority(): return

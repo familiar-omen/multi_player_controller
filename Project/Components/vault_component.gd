@@ -1,60 +1,50 @@
 class_name VaultComponent extends State
 
-var vault_range := 1.0
-var vault_height := 1.0
-var vault_clearance := 2.0
+@export var vault_range := 1.0
+@export var vault_height := 1.0
 
-var is_grounded : bool
-var _velocity_component : Velocity3D
-var input : InputComponent
+@export_group("Nodes", "c_")
+@export var c_grounded : IsGroundedComponent
+@export var c_velocity : Velocity3D
+@export var c_input : InputComponent
+@export var c_shapecast : RayCast3D
 
 var vaulting_to : Vector3
 
-func _component_attached():
-	var _is_grounded_component : IsGroundedComponent = Components.get_first(IsGroundedComponent).on_ancestors_of(entity)
-	var state_machine = Components.get_first(DispersedStateMachine).on_ancestors_of(entity) as DispersedStateMachine
-	input = Components.get_first(InputComponent).on_ancestors_of(entity)
-	state_machine.register_state(self)
-	_velocity_component = Components.get_first(Velocity3D).on_ancestors_of(entity)
-	await detached
-	_is_grounded_component = null
-	_velocity_component = null
+func _ready() -> void:
+	c_shapecast.add_exception(entity)
 
 func valid():
-	if input.vault:
-		var target_ledge = raycast_look_at()
+	if c_input.vault:
 		var target_point = raycast_target()
 		
-		return target_ledge and target_point and not is_grounded
+		return target_point and not c_grounded.is_grounded and (target_point.y > c_velocity.entity.global_position.y)
 	return false
 
 func interruptable():
 	return false
 
 func finished():
-	return not input.vault or (_velocity_component.entity.global_position.y > vaulting_to.y)
+	return not c_input.vault or (c_velocity.entity.global_position.y > vaulting_to.y)
 
 func enter():
 	vaulting_to = raycast_target() + Vector3.UP * 0.2
 
 func exit():
-	_velocity_component.velocity.y = lerp(_velocity_component.velocity.y, 0.0, 1.0)
+	c_velocity.velocity.y = 0.0
 
 func _physics_process(delta: float) -> void:
-	var position : Vector3 = _velocity_component.entity.global_position
+	var position : Vector3 = c_velocity.entity.global_position
 	var from_to = (vaulting_to - position)
 	var direction = from_to.normalized()
 	
-	_velocity_component.velocity = lerp(_velocity_component.velocity, direction + Vector3.UP * 3, delta * 50)
-
-func raycast_look_at():
-	return raycast(entity.global_position, -entity.global_transform.basis.z, vault_range)
-
-func raycast_up():
-	return raycast(entity.global_position, Vector3.UP, vault_height + vault_clearance)
+	c_velocity.velocity = lerp(c_velocity.velocity, direction + Vector3.UP * 3, delta * 50)
 
 func raycast_target():
-	return raycast(raycast_look_at() - entity.global_transform.basis.z / 2 + Vector3.UP * vault_height, Vector3.DOWN, vault_height)
+	if c_shapecast.is_colliding():
+		return raycast(c_shapecast.get_collision_point() - c_shapecast.get_collision_normal() / 2 + Vector3.UP * vault_height, Vector3.DOWN, vault_height)
+	else:
+		return false
 
 func raycast(from, dir, distance):
 	var space_state : PhysicsDirectSpaceState3D = entity.get_world_3d().direct_space_state
